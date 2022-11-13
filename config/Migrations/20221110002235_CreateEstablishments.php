@@ -31,8 +31,57 @@ class CreateEstablishments extends AbstractMigration
             'limit' => 255,
             'null' => false,
         ]);
-        $table->addColumn('endereco', 'string', [
-            'limit' => 255,
+        $table->addColumn('logradouro', 'string', [
+            'default' => null,
+            'limit' => 180,
+            'null' => false,
+        ]);
+        $table->addColumn('numero', 'string', [
+            'default' => null,
+            'limit' => 30,
+            'null' => true,
+        ]);
+        $table->addColumn('complemento', 'string', [
+            'default' => null,
+            'limit' => 150,
+            'null' => true,
+        ]);
+        $table->addColumn('referencia', 'string', [
+            'default' => null,
+            'limit' => 180,
+            'null' => true,
+        ]);
+        $table->addColumn('bairro', 'string', [
+            'default' => null,
+            'limit' => 140,
+            'null' => true,
+        ]);
+        $table->addColumn('cidade', 'string', [
+            'default' => null,
+            'limit' => 140,
+            'null' => false,
+        ]);
+        $table->addColumn('estado', 'string', [
+            'default' => null,
+            'limit' => 2,
+            'null' => false,
+        ]);
+        $table->addColumn('cep', 'string', [
+            'default' => null,
+            'limit' => 10,
+            'null' => false,
+        ]);
+        $table->addColumn('ativo', 'string', [
+            'default' => 'S',
+            'limit' => 1,
+            'null' => true,
+        ]);
+        $table->addColumn('created', 'datetime', [
+            'default' => null,
+            'null' => false,
+        ]);
+        $table->addColumn('modified', 'datetime', [
+            'default' => null,
             'null' => false,
         ]);
         $table->create();

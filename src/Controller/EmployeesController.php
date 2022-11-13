@@ -49,17 +49,21 @@ class EmployeesController extends AppController
      */
     public function add()
     {
+        $empresa = $this->request->getSession()->read('Empresa');
+        $this->request->getSession()->delete('Empresa');
         $employee = $this->Employees->newEmptyEntity();
+        $form = $this->request->getData();
         if ($this->request->is('post')) {
             $employee = $this->Employees->patchEntity($employee, $this->request->getData());
             if ($this->Employees->save($employee)) {
-                $this->Flash->success(__('The employee has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+                $this->Flash->success(__('O registro foi salvo.'));
+                $empresa = !empty($empresa) ? $empresa : $form['establishment_id'];
+                return $this->redirect(['controller'=>'establishments', 'action' => 'view', $empresa]);
             }
-            $this->Flash->error(__('The employee could not be saved. Please, try again.'));
+            $this->Flash->error(__('O registro não pôde ser salvo. Tente novamente'));
         }
-        $establishments = $this->Employees->Establishments->find('list', ['limit' => 200])->all();
+
+        $establishments = $this->Employees->Establishments->find('list', ['limit' => 1, 'conditions'=>"Establishments.id = $empresa"])->all();
         $this->set(compact('employee', 'establishments'));
     }
 
@@ -72,18 +76,28 @@ class EmployeesController extends AppController
      */
     public function edit($id = null)
     {
+        $empresa = $this->request->getSession()->read('Empresa');
+        $this->request->getSession()->delete('Empresa');
         $employee = $this->Employees->get($id, [
             'contain' => [],
         ]);
+        $form = $this->request->getData();
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $employee = $this->Employees->patchEntity($employee, $this->request->getData());
+            $employee = $this->Employees->patchEntity($employee, $form);
             if ($this->Employees->save($employee)) {
-                $this->Flash->success(__('The employee has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+                $this->Flash->success(__('O registro foi salvo.'));
+                $empresa = !empty($empresa) ? $empresa : $form['establishment_id'];
+                return $this->redirect(['controller'=>'establishments', 'action' => 'view', $empresa]);
             }
-            $this->Flash->error(__('The employee could not be saved. Please, try again.'));
+            foreach($employee->getErrors() as $error){
+                if(!empty($error['custom'])){
+                    $this->Flash->error($error['custom']);
+                } else {
+                    $this->Flash->error(__('O registro não pôde ser salvo. Tente novamente'));
+                }
+            }
         }
+
         $establishments = $this->Employees->Establishments->find('list', ['limit' => 200])->all();
         $this->set(compact('employee', 'establishments'));
     }
@@ -95,16 +109,18 @@ class EmployeesController extends AppController
      * @return \Cake\Http\Response|null|void Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function desativar($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
+        $empresa = $this->request->getSession()->read('Empresa');
+        $this->request->getSession()->delete('Empresa');
         $employee = $this->Employees->get($id);
-        if ($this->Employees->delete($employee)) {
-            $this->Flash->success(__('The employee has been deleted.'));
+        $employee['ativo'] = ($employee['ativo'] == 'S') ? 'N' : 'S';
+        if ($this->Employees->save($employee)) {
+            $this->Flash->success(__('O registro foi salvo.'));
         } else {
-            $this->Flash->error(__('The employee could not be deleted. Please, try again.'));
+            $this->Flash->error(__('O registro não pôde ser salvo. Por favor, tente novamente.'));
         }
 
-        return $this->redirect(['action' => 'index']);
+        return $this->redirect(['controller'=>'establishments', 'action' => 'index', $empresa]);
     }
 }

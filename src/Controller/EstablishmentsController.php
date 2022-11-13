@@ -18,7 +18,7 @@ class EstablishmentsController extends AppController
      */
     public function index()
     {
-        $establishments = $this->paginate($this->Establishments);
+        $establishments = $this->Establishments->find('all');
 
         $this->set(compact('establishments'));
     }
@@ -35,7 +35,6 @@ class EstablishmentsController extends AppController
         $establishment = $this->Establishments->get($id, [
             'contain' => ['Employees'],
         ]);
-
         $this->set(compact('establishment'));
     }
 
@@ -48,13 +47,24 @@ class EstablishmentsController extends AppController
     {
         $establishment = $this->Establishments->newEmptyEntity();
         if ($this->request->is('post')) {
-            $establishment = $this->Establishments->patchEntity($establishment, $this->request->getData());
+            $form = $this->request->getData();
+//            $form['cnpj'] = preg_replace("/[  ^0-9]/","", $form['cnpj']);
+//            debug($form
+//            );
+            $establishment = $this->Establishments->patchEntity($establishment, $form);
+//            debug($establishment);
+//            exit;
             if ($this->Establishments->save($establishment)) {
-                $this->Flash->success(__('The establishment has been saved.'));
-
+                $this->Flash->success(__('O registro foi salvo.'));
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The establishment could not be saved. Please, try again.'));
+            foreach($establishment->getErrors() as $error){
+                if(!empty($error['custom'])){
+                    $this->Flash->error($error['custom']);
+                } else {
+                    $this->Flash->error(__('O registro não pôde ser salvo. Tente novamente'));
+                }
+            }
         }
         $this->set(compact('establishment'));
     }
@@ -74,14 +84,20 @@ class EstablishmentsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $establishment = $this->Establishments->patchEntity($establishment, $this->request->getData());
             if ($this->Establishments->save($establishment)) {
-                $this->Flash->success(__('The establishment has been saved.'));
-
+                $this->Flash->success(__('O registro foi salvo.'));
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The establishment could not be saved. Please, try again.'));
+            foreach($establishment->getErrors() as $error){
+                if(!empty($error['custom'])){
+                    $this->Flash->error($error['custom']);
+                } else {
+                    $this->Flash->error(__('O registro não pôde ser salvo. Tente novamente'));
+                }
+            }
         }
         $this->set(compact('establishment'));
     }
+
 
     /**
      * Delete method
@@ -90,14 +106,14 @@ class EstablishmentsController extends AppController
      * @return \Cake\Http\Response|null|void Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function desativar($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
         $establishment = $this->Establishments->get($id);
-        if ($this->Establishments->delete($establishment)) {
-            $this->Flash->success(__('The establishment has been deleted.'));
+        $establishment['ativo'] = ($establishment['ativo'] == 'S') ? 'N' : 'S';
+        if ($this->Establishments->save($establishment)) {
+            $this->Flash->success(__('O registro foi salvo.'));
         } else {
-            $this->Flash->error(__('The establishment could not be deleted. Please, try again.'));
+            $this->Flash->error(__('O registro não pôde ser salvo. Tente novamente'));
         }
 
         return $this->redirect(['action' => 'index']);

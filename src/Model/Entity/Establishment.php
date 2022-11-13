@@ -10,10 +10,20 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property string $razaoSocial
- * @property int $cnpj
+ * @property string $cnpj
  * @property string $telefone
  * @property string $email
- * @property string $endereco
+ * @property string $logradouro
+ * @property string|null $numero
+ * @property string|null $complemento
+ * @property string|null $referencia
+ * @property string|null $bairro
+ * @property string $cidade
+ * @property string $estado
+ * @property string $cep
+ * @property string|null $ativo
+ * @property \Cake\I18n\FrozenTime $created
+ * @property \Cake\I18n\FrozenTime $modified
  *
  * @property \App\Model\Entity\Employee[] $employees
  */
@@ -33,7 +43,17 @@ class Establishment extends Entity
         'cnpj' => true,
         'telefone' => true,
         'email' => true,
-        'endereco' => true,
+        'logradouro' => true,
+        'numero' => true,
+        'complemento' => true,
+        'referencia' => true,
+        'bairro' => true,
+        'cidade' => true,
+        'estado' => true,
+        'cep' => true,
+        'ativo' => true,
+        'created' => true,
+        'modified' => true,
         'employees' => true,
     ];
 }

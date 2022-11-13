@@ -13,6 +13,9 @@ use Cake\ORM\Entity;
  * @property string $telefone
  * @property string $email
  * @property string $dataDeNascimento
+ * @property string|null $ativo
+ * @property \Cake\I18n\FrozenTime $created
+ * @property \Cake\I18n\FrozenTime $modified
  * @property int $establishment_id
  *
  * @property \App\Model\Entity\Establishment $establishment
@@ -33,6 +36,9 @@ class Employee extends Entity
         'telefone' => true,
         'email' => true,
         'dataDeNascimento' => true,
+        'ativo' => true,
+        'created' => true,
+        'modified' => true,
         'establishment_id' => true,
         'establishment' => true,
     ];

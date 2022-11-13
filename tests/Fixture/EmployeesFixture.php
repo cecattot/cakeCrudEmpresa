@@ -21,9 +21,12 @@ class EmployeesFixture extends TestFixture
             [
                 'id' => 1,
                 'nome' => 'Lorem ipsum dolor sit amet',
-                'telefone' => 'Lorem ipsum d',
+                'telefone' => 'Lorem ipsum do',
                 'email' => 'Lorem ipsum dolor sit amet',
                 'dataDeNascimento' => 'Lorem ip',
+                'ativo' => 'L',
+                'created' => '2022-11-12 18:44:37',
+                'modified' => '2022-11-12 18:44:37',
                 'establishment_id' => 1,
             ],
         ];

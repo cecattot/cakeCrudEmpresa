@@ -26,6 +26,8 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Employee[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
  * @method \App\Model\Entity\Employee[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
  * @method \App\Model\Entity\Employee[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
+ *
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class EmployeesTable extends Table
 {
@@ -42,6 +44,8 @@ class EmployeesTable extends Table
         $this->setTable('employees');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
+
+        $this->addBehavior('Timestamp');
 
         $this->belongsTo('Establishments', [
             'foreignKey' => 'establishment_id',
@@ -65,7 +69,7 @@ class EmployeesTable extends Table
 
         $validator
             ->scalar('telefone')
-            ->maxLength('telefone', 15)
+            ->maxLength('telefone', 16)
             ->requirePresence('telefone', 'create')
             ->notEmptyString('telefone');
 
@@ -79,6 +83,11 @@ class EmployeesTable extends Table
             ->maxLength('dataDeNascimento', 10)
             ->requirePresence('dataDeNascimento', 'create')
             ->notEmptyString('dataDeNascimento');
+
+        $validator
+            ->scalar('ativo')
+            ->maxLength('ativo', 1)
+            ->allowEmptyString('ativo');
 
         $validator
             ->integer('establishment_id')

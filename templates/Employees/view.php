@@ -1,48 +1,51 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\Employee $employee
+ * @var iterable<\App\Model\Entity\employee> $employee
  */
 ?>
-<div class="row">
-    <aside class="column">
-        <div class="side-nav">
-            <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Html->link(__('Edit Employee'), ['action' => 'edit', $employee->id], ['class' => 'side-nav-item']) ?>
-            <?= $this->Form->postLink(__('Delete Employee'), ['action' => 'delete', $employee->id], ['confirm' => __('Are you sure you want to delete # {0}?', $employee->id), 'class' => 'side-nav-item']) ?>
-            <?= $this->Html->link(__('List Employees'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
-            <?= $this->Html->link(__('New Employee'), ['action' => 'add'], ['class' => 'side-nav-item']) ?>
+<div class="employees index content">
+    <div class="card border border-success shadow-0 mb-3">
+        <div class="card-header bg-transparent border-success">
+            <div class="row">
+                <div class="col">
+                    <h3 class="text-center"><?= __('Funcionário') ?></h3>
+                </div>
+            </div>
         </div>
-    </aside>
-    <div class="column-responsive column-80">
-        <div class="employees view content">
-            <h3><?= h($employee->id) ?></h3>
-            <table>
-                <tr>
-                    <th><?= __('Nome') ?></th>
-                    <td><?= h($employee->nome) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Telefone') ?></th>
-                    <td><?= h($employee->telefone) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Email') ?></th>
-                    <td><?= h($employee->email) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('DataDeNascimento') ?></th>
-                    <td><?= h($employee->dataDeNascimento) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Establishment') ?></th>
-                    <td><?= $employee->has('establishment') ? $this->Html->link($employee->establishment->id, ['controller' => 'Establishments', 'action' => 'view', $employee->establishment->id]) : '' ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Id') ?></th>
-                    <td><?= $this->Number->format($employee->id) ?></td>
-                </tr>
-            </table>
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover" id="tableIndex">
+                            <thead>
+                            <tr>
+                                <th width="25%">Campo</th>
+                                <th>Valor</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Nome</td>
+                                <td><?= h($employee->nome) ?></td>
+                            </tr>
+                            <tr>
+                                <td>Telefone</td>
+                                <td><?= h($employee->telefone) ?></td>
+                            </tr>
+                            <tr>
+                                <td>E-mail</td>
+                                <td><?= h($employee->email) ?></td>
+                            </tr>
+                            <tr>
+                                <td>Data de Nascimento</td>
+                                <td><?= h($employee->dataDeNascimento) ?></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

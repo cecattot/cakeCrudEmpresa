@@ -1,0 +1,43 @@
+<?php
+
+
+
+//URL de SUA API
+$url = 'localhost:8765/api/index';
+
+//cria um resource cURL
+$ch = curl_init($url);
+
+//monte um array que conterá os campos a serem enviados
+//Vamos neste tutorial optar por usar um array para montar os campos de post. Este é o campo de form-data.
+//Nossa api específica espera um array em formato JSON com uma única chave text e seu respectivo conteúdo que será analisado.
+$empresa = '01';
+$mes = '08';
+$data = compact(
+'empresa', 'mes'
+);
+
+//vamos usar a função json encode para transformar nosso array em uma string Json válida
+$corpo = json_encode($data);
+
+//agora vamos anexar o corpo em formato json da sua requisição
+curl_setopt($ch, CURLOPT_POSTFIELDS, $corpo);
+
+//defina o conteúdo do envio como json
+curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Typeapplicationjson'));
+
+//ative o recebimento de retorno da requisição
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+//executa a requisição POST
+$resultado = curl_exec($ch);
+
+//encerra conexão e libera variável
+curl_close($ch);
+
+//1 - Aqui estamos usando json_decode para transformar nossa resposta JSON em um objeto PHP.
+//2- Em seguida usamos print_r passando o segundo parâmetro true para melhorar a legibilidade de objetos e arrays PHP
+//3 - Por fim a tag html pre melhora a formatação de código no navegador
+echo $resultado;
+//echo 'pre'.print_r(json_decode($resultado),true).'pre';
+

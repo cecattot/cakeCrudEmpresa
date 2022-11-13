@@ -20,7 +20,7 @@ class CreateEmployees extends AbstractMigration
             'null' => false,
         ]);
         $table->addColumn('telefone', 'string', [
-            'limit' => 15,
+            'limit' => 16,
             'null' => false,
         ]);
         $table->addColumn('email', 'string', [
@@ -29,6 +29,19 @@ class CreateEmployees extends AbstractMigration
         ]);
         $table->addColumn('dataDeNascimento', 'string', [
             'limit' => 10,
+            'null' => false,
+        ]);
+        $table->addColumn('ativo', 'string', [
+            'default' => 'S',
+            'limit' => 1,
+            'null' => true,
+        ]);
+        $table->addColumn('created', 'datetime', [
+            'default' => null,
+            'null' => false,
+        ]);
+        $table->addColumn('modified', 'datetime', [
+            'default' => null,
             'null' => false,
         ]);
         $table->addColumn('establishment_id', 'integer');

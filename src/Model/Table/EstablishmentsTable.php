@@ -26,6 +26,8 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Establishment[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
  * @method \App\Model\Entity\Establishment[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
  * @method \App\Model\Entity\Establishment[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
+ *
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class EstablishmentsTable extends Table
 {
@@ -40,8 +42,10 @@ class EstablishmentsTable extends Table
         parent::initialize($config);
 
         $this->setTable('establishments');
-        $this->setDisplayField('id');
+        $this->setDisplayField('razaoSocial');
         $this->setPrimaryKey('id');
+
+        $this->addBehavior('Timestamp');
 
         $this->hasMany('Employees', [
             'foreignKey' => 'establishment_id',
@@ -63,8 +67,7 @@ class EstablishmentsTable extends Table
             ->notEmptyString('razaoSocial');
 
         $validator
-            ->integer('cnpj')
-            ->requirePresence('cnpj', 'create')
+            ->scalar('cnpj')
             ->maxLength('cnpj', 14)
             ->add('cnpj', 'custom',
                 ['rule' =>
@@ -106,6 +109,7 @@ class EstablishmentsTable extends Table
                     // Caso retorne falso ele vai retornar uma mensagem falando que é inválido
                     'message' => 'CNPJ Inválido'
                 ])
+            ->requirePresence('cnpj', 'create')
             ->notEmptyString('cnpj');
 
         $validator
@@ -120,10 +124,53 @@ class EstablishmentsTable extends Table
             ->notEmptyString('email');
 
         $validator
-            ->scalar('endereco')
-            ->maxLength('endereco', 255)
-            ->requirePresence('endereco', 'create')
-            ->notEmptyString('endereco');
+            ->scalar('logradouro')
+            ->maxLength('logradouro', 180)
+            ->requirePresence('logradouro', 'create')
+            ->notEmptyString('logradouro');
+
+        $validator
+            ->scalar('numero')
+            ->maxLength('numero', 30)
+            ->allowEmptyString('numero');
+
+        $validator
+            ->scalar('complemento')
+            ->maxLength('complemento', 150)
+            ->allowEmptyString('complemento');
+
+        $validator
+            ->scalar('referencia')
+            ->maxLength('referencia', 180)
+            ->allowEmptyString('referencia');
+
+        $validator
+            ->scalar('bairro')
+            ->maxLength('bairro', 140)
+            ->allowEmptyString('bairro');
+
+        $validator
+            ->scalar('cidade')
+            ->maxLength('cidade', 140)
+            ->requirePresence('cidade', 'create')
+            ->notEmptyString('cidade');
+
+        $validator
+            ->scalar('estado')
+            ->maxLength('estado', 2)
+            ->requirePresence('estado', 'create')
+            ->notEmptyString('estado');
+
+        $validator
+            ->scalar('cep')
+            ->maxLength('cep', 10)
+            ->requirePresence('cep', 'create')
+            ->notEmptyString('cep');
+
+        $validator
+            ->scalar('ativo')
+            ->maxLength('ativo', 1)
+            ->allowEmptyString('ativo');
 
         return $validator;
     }
