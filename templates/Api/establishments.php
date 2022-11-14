@@ -1,2 +1,2 @@
 <?php
-echo json_encode(compact('json'));
+echo json_encode(compact('establishment'));

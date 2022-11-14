@@ -52,27 +52,12 @@ class ApiController extends AppController
             $mes = $jsonData->mes ;
         }
 
-        $establishments = $this->Establishments->find('all', ['fields'=>
-            [   'Establishments.razaoSocial', 'Establishments.cnpj', 'Establishments.telefone',
-                'Establishments.email', 'Establishments.logradouro', 'Establishments.numero',
-                'Establishments.complemento', 'Establishments.referencia', 'Establishments.bairro',
-                'Establishments.cidade', 'Establishments.estado', 'Establishments.cep',
-            ], 'conditions'=>"Establishments.id = $empresa and Establishments.ativo = 'S'",
-            ]);
-
-        $employees = $this->Establishments->Employees->find('all', ['fields'=>
-            [
-                'Employees.nome', 'Employees.dataDeNascimento', 'Employees.telefone', 'Employees.email',
-            ], 'conditions'=>"Employees.establishment_id = $empresa and Employees.ativo = 'S'"]);
-
-        $json = [];
-        $json['establishments'] = $establishments;
-        $json['employees'] = $employees;
+        $establishment = $this->Establishments->get($empresa, ['contain'=>'Employees']);
         // Set the view vars that have to be serialized.
-        $this->set(compact('json'));
+        $this->set(compact('establishment'));
 
         // Specify which view vars JsonView should serialize.
-        $this->viewBuilder()->setOption('serialize', compact('json'));
+        $this->viewBuilder()->setOption('serialize', compact('establishment'));
 
     }
 
